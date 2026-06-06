@@ -10,20 +10,20 @@ namespace Main
     public class Town : Game
     {
         public Town(Player player) : base(player) { }
-        public void EnterTown(ref Player player)
+        public void EnterTown()
         {
-            Console.Write("You have selected to go to the town. Where would you like to go?\n1. Inn (Restore HP to max)\n2. Item Shop (Buy Consumable Items)\n3. Weapon Shop\n4. Armor Shop\n5. Hospital (Review Character stats & apperances)\n6. Exit\n> ");
             while (true)
             {
+                Console.Write("You have selected to go to the town. Where would you like to go?\n1. Inn (Restore HP to max)\n2. Item Shop (Buy Consumable Items)\n3. Weapon Shop\n4. Armor Shop\n5. Hospital (Review Character stats & apperances)\n6. Exit\n> ");
                 if (int.TryParse(Console.ReadLine(), out int option))
                 {
                     switch (option)
                     {
-                        case 1: Inn(ref player); return;
-                        case 2: EnterItemShop(ref player); return;
-                        case 3: EnterWeaponShop(ref player); return;
-                        case 4: EnterArmorShop(ref player); return;
-                        case 5: Hospital(ref player); return;
+                        case 1: Inn(); break;
+                        case 2: EnterItemShop(); break;
+                        case 3: EnterWeaponShop(); break;
+                        case 4: EnterArmorShop(); break;
+                        case 5: Hospital(); break;
                         case 6: return;
                         default: Console.WriteLine("That number is not an option :("); break;
                     }
@@ -34,35 +34,61 @@ namespace Main
                 }
             }
         }
-        public void Inn(ref Player player)
+        public void Inn()
         {
-            player.CurrentHP = player.MaxHP;
-            Console.WriteLine("You have successfully healed to max HP");
+            Console.Clear();
+            _currentPlayer.CurrentHP = _currentPlayer.MaxHP;
+            Console.WriteLine($"You have successfully healed to max HP ({_currentPlayer.MaxHP})");
+            Console.ReadKey();
+            Console.Clear();
         }
-        public void EnterItemShop(ref Player player)
+        public void EnterItemShop()
         {
+            Console.Clear();
             Console.WriteLine("You have entered the item shop!");
             ItemShop itemShop = new ItemShop();
             itemShop.DisplayShop();
-            
+            Console.ReadKey();
+            Console.Clear();
+
         }
-        public void EnterArmorShop(ref Player player)
+        public void EnterArmorShop()
         {
+            Console.Clear();
             Console.WriteLine("You have entered the Armor shop!");
             ArmorShop armorShop = new ArmorShop();
             armorShop.DisplayShop();
-            
+            Console.ReadKey();
+            Console.Clear();
+
         }
-        public void EnterWeaponShop(ref Player player)
+        public void EnterWeaponShop()
         {
+            Console.Clear();
             Console.WriteLine("You have entered the Weapon shop!");
             WeaponShop weaponShop = new WeaponShop();
             weaponShop.DisplayShop();
+            Console.ReadKey();
+            Console.Clear();
             
         }
-        public void Hospital(ref Player player)
+        public void Hospital()
         {
-            Console.WriteLine($"Your Apperance/Stats\nName: {player.Name}\nHair Colour: {player.HairColour}\nGender: {player.Gender}\nAge: {player.Age}\n\nAttack: {player.Atk}\nDefense: {player.Defense}\nCurrent HP: {player.CurrentHP}\nMax HP: {player.MaxHP}");
-        }
+            Console.Clear();
+            Console.WriteLine("+--------------------------------+");
+            Console.WriteLine("|         CHARACTER INFO         |");
+            Console.WriteLine("+--------------------------------+");
+            Console.WriteLine($"| Name       : {_currentPlayer.Name,-18}|");
+            Console.WriteLine($"| Hair Colour: {_currentPlayer.HairColour,-18}|");
+            Console.WriteLine($"| Gender     : {_currentPlayer.Gender,-18}|");
+            Console.WriteLine($"| Age        : {_currentPlayer.Age,-18}|");
+            Console.WriteLine("+--------------------------------+");
+            Console.WriteLine($"| Attack     : {_currentPlayer.Atk,-18}|");
+            Console.WriteLine($"| Defense    : {_currentPlayer.Defense,-18}|");
+            Console.WriteLine($"| HP         : {$"{_currentPlayer.CurrentHP}/{_currentPlayer.MaxHP}",-18}|");
+            Console.WriteLine("+--------------------------------+");
+            Console.ReadKey();
+            Console.Clear();
+        }   
     }
 }

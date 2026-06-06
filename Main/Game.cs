@@ -8,7 +8,7 @@ namespace Main
 {
     public class Game
     {
-        private Player _currentPlayer;
+        protected Player _currentPlayer;
 
         public Game(Player currentPlayer) 
         {
@@ -22,11 +22,13 @@ namespace Main
                 if (enemy.CurrentHP <= 0)
                 {
                     Console.WriteLine("You win!");
+                    Console.ReadKey();
                     return true;
                 }
                 if (_currentPlayer.CurrentHP <= 0)
                 {
                     Console.WriteLine("You lose!");
+                    Console.ReadKey();
                     return false;
                 }
                 _currentPlayer.Display();
@@ -79,7 +81,7 @@ namespace Main
                     Console.Clear();
                     Random random = new Random();
                     int randomOption = random.Next(10);
-                    if (randomOption >= 0 && randomOption <= 6)
+                    if (randomOption <= 6)
                     {
                         Console.WriteLine("The enemy attacks");
                         _currentPlayer.CurrentHP = enemy.Attacks(_currentPlayer);
@@ -99,7 +101,18 @@ namespace Main
 
         public void StartGame()
         {
+            BossCastle bossCastle = new BossCastle(_currentPlayer);
             Forest forest = new Forest(_currentPlayer);
+            Town town = new Town(_currentPlayer);
+            Mountains mountains = new Mountains(_currentPlayer);
+            _currentPlayer.CheckInventory();
+            if (!bossCastle.EnterCastle())
+            {
+                Console.WriteLine("You lose 100 gold from losing");
+                _currentPlayer.Gold -= 100;
+            }
+            mountains.EnterMountain();
+            town.EnterTown();
             forest.EnterForest();
         }
     }

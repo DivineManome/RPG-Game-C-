@@ -75,12 +75,12 @@
 //Console.WriteLine("As a new player, you will be starting with 10 attack, 5 defense, and 100 HP");
 //--------------------------------------------------------------------------------------------------
 
-Player you = new Player(Gender.Male, "Black", 18, "Divine", 100.0f, 40, 5);
+Player you = new Player(Gender.Male, "Black", 18, "Divine", 500.0f, 80, 0,0);
 
 Game game = new Game(you);
 game.StartGame();
 
-Enemy enemy = new Enemy("Goblin", 100.0f, 10, 5);
+Enemy enemy = new Enemy("Goblin", 100.0f, 10, 5, 100);
 public enum Gender
 {
     Male,

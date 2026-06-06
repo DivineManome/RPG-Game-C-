@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Main
 {
-    public class Forest : Game
+    public class Mountains : Game
     {
         private List<Enemy> _enemies;
-        public Forest(Player player) : base(player)
+        public Mountains(Player player) : base(player)
         {
             _enemies = new List<Enemy>
             {
-                new Goblin("Goblin", 0,0,0,0),
-                new Boar("Boar", 0,0,0,0),
-                new Cobra("Cobra", 0,0,0,0),
-                new Spider("Spider", 0,0,0,0),
-                new Bandit("Bandit", 0,0,0,0)
+                new Yeti("Yeti", 0,0,0,0),
+                new TribeMember("Tribe Member", 0,0,0,0),
+                new Golem("Golem", 0,0,0,0),
+                new Dragon("Dragon", 0,0,0,0),
+                new Giant("Giant", 0,0,0,0)
             };
         }
-        public void EnterForest()
+        public void EnterMountain()
         {
             Random random = new Random();
             int reward = random.Next(2);
@@ -32,15 +31,15 @@ namespace Main
             else
             {
                 Enemy encounteredEnemy = _enemies[random.Next(5)];
-                encounteredEnemy.MaxHP = random.Next(80, 101);
+                encounteredEnemy.MaxHP = random.Next(200, 301);
                 encounteredEnemy.CurrentHP = encounteredEnemy.MaxHP;
-                encounteredEnemy.Atk = random.Next(5, 11);
-                encounteredEnemy.Defense = random.Next(1, 6);
-                encounteredEnemy.GoldDrop = random.Next(100, 151);
+                encounteredEnemy.Atk = random.Next(20, 31);
+                encounteredEnemy.Defense = random.Next(7, 11);
+                encounteredEnemy.GoldDrop = random.Next(300, 351);
                 bool ifWin = EngageInBattle(encounteredEnemy);
                 if (ifWin)
                 {
-                    Console.WriteLine($"You are rewarded {encounteredEnemy.GoldDrop} gold for killing this enemy!");
+                    Console.WriteLine($"You are rewarded {encounteredEnemy.GoldDrop} gold for killing {encounteredEnemy.Name}!");
                 }
             }
         }
