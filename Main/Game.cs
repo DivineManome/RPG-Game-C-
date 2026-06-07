@@ -14,28 +14,37 @@ namespace Main
         {
             _currentPlayer = currentPlayer;
         }
-        public bool EngageInBattle(Enemy enemy)
+        public bool EngageInBattle(Enemy enemy, bool bossBattle)
         {
             bool myTurn = true;
             while (true)
             {
                 if (enemy.CurrentHP <= 0)
                 {
-                    Console.WriteLine("You win!");
+                    Console.WriteLine($"You win and you are rewarded {enemy.GoldDrop} gold!");
                     Console.ReadKey();
+                    _currentPlayer.Gold += enemy.GoldDrop;
                     return true;
                 }
                 if (_currentPlayer.CurrentHP <= 0)
                 {
-                    Console.WriteLine("You lose!");
-                    Console.ReadKey();
+                    if (!bossBattle)
+                    {
+                        Console.WriteLine($"You lose and half of your gold was taken! ({_currentPlayer.Gold /= 2})");
+                        Console.ReadKey();
+                        _currentPlayer.Gold /= 2;
+                    }
+                    Console.Write($"Your health restored to full ({_currentPlayer.MaxHP})...");
+                    _currentPlayer.CurrentHP = _currentPlayer.MaxHP;
                     return false;
                 }
                 _currentPlayer.Display();
                 enemy.Display();
                 if (myTurn)
                 {
-                    Console.Write("\nIt is your turn, what would you like to do?:\n1. Attack\n2. Items\n3. Flee\n> ");
+                    Console.WriteLine("\nIt is your turn, what would you like to do?:\n1. Attack\n2. Items");
+                    if (!bossBattle) { Console.WriteLine("3. Flee"); }
+                    Console.Write("> ");
                     if (int.TryParse(Console.ReadLine(), out int option))
                     {
                         switch (option)
@@ -43,15 +52,15 @@ namespace Main
                             case 1:
                                 {
                                     Console.Clear();
-                                    Console.WriteLine("You attack!");
                                     enemy.CurrentHP = _currentPlayer.Attacks(enemy);
                                     Console.ReadKey();
                                     myTurn = false;
                                     break;
                                 }
-                            case 2: Console.WriteLine("You open the Item Menu!"); Console.ReadKey(); myTurn = false; break; // items yet to be created
+                            case 2: Console.WriteLine("You open the Item Menu!"); Console.ReadKey(); myTurn = false; break;
                             case 3:
                                 {
+                                    if (bossBattle) { break; }
                                     Random randomNum = new Random();
                                     int fleeChance = randomNum.Next(1, 10);
                                     Console.Clear();
@@ -70,20 +79,18 @@ namespace Main
                                     myTurn = false;
                                     break;
                                 }
-                            default: Console.WriteLine("That number is not an option :("); Console.ReadKey(); break;
                         }
                     }
                 }
                 else
                 {
-                    Console.WriteLine("It the enemies turn...");
+                    Console.Write("It the enemies turn...");
                     Console.ReadKey();
                     Console.Clear();
                     Random random = new Random();
                     int randomOption = random.Next(10);
                     if (randomOption <= 6)
                     {
-                        Console.WriteLine("The enemy attacks");
                         _currentPlayer.CurrentHP = enemy.Attacks(_currentPlayer);
                         enemy.Superable = true;
                         Console.ReadKey();
@@ -105,15 +112,50 @@ namespace Main
             Forest forest = new Forest(_currentPlayer);
             Town town = new Town(_currentPlayer);
             Mountains mountains = new Mountains(_currentPlayer);
-            _currentPlayer.CheckInventory();
-            if (!bossCastle.EnterCastle())
+            while (true)
             {
-                Console.WriteLine("You lose 100 gold from losing");
-                _currentPlayer.Gold -= 100;
+                Console.Write($"Main map:\n1. Town\n2. Forest\n3. Mountain\n4. Boss Castle (300 gold required)\n5. Check Inventory\n6. Change Equippment\n7. Save Game\n8. Load Game\n9. Exit Game\n> ");
+                if (int.TryParse(Console.ReadLine(), out int option))
+                {
+                    if (option > 0 && option <= 9)
+                    {
+                        switch (option)
+                        {
+                            case 1: Console.Clear(); town.EnterTown(); break;
+                            case 2: Console.Clear(); forest.EnterForest(); Console.ReadKey(); break;
+                            case 3: Console.Clear(); mountains.EnterMountain(); Console.ReadKey(); break;
+                            case 4:
+                                {
+                                    Console.Clear();
+                                    if (_currentPlayer.Gold < 300)
+                                    {
+                                        Console.Write("You do not have enough gold to pay the penalty price. (300)...");
+                                        Console.ReadKey();
+                                        break;
+                                    }
+                                    if (!bossCastle.EnterCastle())
+                                    {
+                                        Console.Write("\n300 gold is taken from losing...");
+                                        Console.ReadKey();
+                                        _currentPlayer.Gold -= 300;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        Console.Clear();
+                                        Console.Write("You have completed the game! "); _currentPlayer.Gold += 1000; Console.ReadKey(); break;
+                                    }
+                                }
+                            case 5: Console.Clear(); _currentPlayer.CheckInventory(); break;
+                            case 6: Console.Clear(); Console.Write("You are changing equippment..."); Console.ReadKey(); break;
+                            case 7: Console.Clear(); Console.Write("You are saving the game..."); Console.ReadKey(); break;
+                            case 8: Console.Clear(); Console.Write("You are loading the game..."); Console.ReadKey(); break;
+                            case 9: return;
+                        }
+                    }
+                }
+                Console.Clear();
             }
-            mountains.EnterMountain();
-            town.EnterTown();
-            forest.EnterForest();
         }
     }
 }

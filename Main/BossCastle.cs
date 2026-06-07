@@ -38,20 +38,25 @@ namespace Main
         }
         public bool EnterCastle()
         {
+            Console.Write("You enter the castle and you encounter...");
+            Console.ReadKey();
+            Console.Clear();
             Random random = new Random();
             Enemy firstEnemy = _enemyType1[random.Next(5)];
             firstEnemy.MaxHP = random.Next(80, 101);
             firstEnemy.CurrentHP = firstEnemy.MaxHP;
             firstEnemy.Atk = random.Next(5, 11);
             firstEnemy.Defense = random.Next(1, 6);
-            bool ifWin = EngageInBattle(firstEnemy);
+            Console.Write($"A {firstEnemy.Name}! engaging in battle...");
+            Console.ReadKey();
+            Console.Clear();
+            bool ifWin = EngageInBattle(firstEnemy, true);
             if (!ifWin)
             {
-                Console.WriteLine("You lose!");
                 return false;
             }
             Console.Clear();
-            Console.WriteLine($"You move onto the next level...");
+            Console.Write($"You move onto the next level...");
             Console.ReadKey();
             Console.Clear();
             Enemy secondEnemy = _enemyType2[random.Next(5)];
@@ -59,14 +64,19 @@ namespace Main
             secondEnemy.CurrentHP = secondEnemy.MaxHP;
             secondEnemy.Atk = random.Next(20, 31);
             secondEnemy.Defense = random.Next(7, 11);
-            ifWin = EngageInBattle(secondEnemy);
+            Console.Write("You enter the second room and you encounter...");
+            Console.ReadKey();
+            Console.Clear();
+            Console.Write($"A {secondEnemy.Name}! engaging in battle...");
+            Console.ReadKey();
+            Console.Clear();
+            ifWin = EngageInBattle(secondEnemy, true);
             if (!ifWin)
             {
-                Console.WriteLine("You lose!");
                 return false;
             }
             Console.Clear();
-            Console.WriteLine($"You move onto the next level...");
+            Console.Write($"You move onto the next level...");
             Console.ReadKey();
             Console.Clear();
             BossEnemy bossEnemy = _bossEnemy[random.Next(3)];
@@ -74,14 +84,19 @@ namespace Main
             bossEnemy.CurrentHP = bossEnemy.MaxHP;
             bossEnemy.Atk = random.Next(100, 121);
             bossEnemy.Defense = random.Next(20, 31);
-            ifWin = EngageInBattle(bossEnemy);
+            Console.Write("You enter the boss room and you encounter...");
+            Console.ReadKey();
+            Console.Clear();
+            Console.Write($"{bossEnemy.Name}! engaging in battle...");
+            Console.ReadKey();
+            Console.Clear();
+            ifWin = EngageInBattle(bossEnemy, true);
             if (!ifWin)
             {
-                Console.WriteLine("You lose!");
                 return false;
             }
             Console.Clear();
-            Console.WriteLine($"You completed the castle, you are rewarded with 1000 gold!");
+            Console.Write($"You completed the castle, you are rewarded with 1000 gold!");
             Console.ReadKey();
             Console.Clear();
             return true;

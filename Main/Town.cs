@@ -9,7 +9,15 @@ namespace Main
 {
     public class Town : Game
     {
-        public Town(Player player) : base(player) { }
+        private ItemShop _itemShop;
+        private ArmorShop _armorShop;
+        private WeaponShop _weaponShop;
+        public Town(Player player) : base(player)
+        {
+            _itemShop = new ItemShop();
+            _armorShop = new ArmorShop();
+            _weaponShop = new WeaponShop();
+        }
         public void EnterTown()
         {
             while (true)
@@ -25,20 +33,20 @@ namespace Main
                         case 4: EnterArmorShop(); break;
                         case 5: Hospital(); break;
                         case 6: return;
-                        default: Console.WriteLine("That number is not an option :("); break;
                     }
                 }
                 else
                 {
                     Console.WriteLine("That character is not an option :(");
                 }
+                Console.Clear();
             }
         }
         public void Inn()
         {
             Console.Clear();
             _currentPlayer.CurrentHP = _currentPlayer.MaxHP;
-            Console.WriteLine($"You have successfully healed to max HP ({_currentPlayer.MaxHP})");
+            Console.Write($"You have successfully restored your HP to max! ({_currentPlayer.MaxHP})");
             Console.ReadKey();
             Console.Clear();
         }
@@ -46,8 +54,7 @@ namespace Main
         {
             Console.Clear();
             Console.WriteLine("You have entered the item shop!");
-            ItemShop itemShop = new ItemShop();
-            itemShop.DisplayShop();
+            _itemShop.DisplayShop();
             Console.ReadKey();
             Console.Clear();
 
@@ -56,19 +63,14 @@ namespace Main
         {
             Console.Clear();
             Console.WriteLine("You have entered the Armor shop!");
-            ArmorShop armorShop = new ArmorShop();
-            armorShop.DisplayShop();
-            Console.ReadKey();
+            _armorShop.DisplayShop(ref _currentPlayer);
             Console.Clear();
 
         }
         public void EnterWeaponShop()
         {
             Console.Clear();
-            Console.WriteLine("You have entered the Weapon shop!");
-            WeaponShop weaponShop = new WeaponShop();
-            weaponShop.DisplayShop();
-            Console.ReadKey();
+            _weaponShop.DisplayShop(ref _currentPlayer);
             Console.Clear();
             
         }
@@ -82,6 +84,7 @@ namespace Main
             Console.WriteLine($"| Hair Colour: {_currentPlayer.HairColour,-18}|");
             Console.WriteLine($"| Gender     : {_currentPlayer.Gender,-18}|");
             Console.WriteLine($"| Age        : {_currentPlayer.Age,-18}|");
+            Console.WriteLine($"| Gold       : {_currentPlayer.Gold,-18}|");
             Console.WriteLine("+--------------------------------+");
             Console.WriteLine($"| Attack     : {_currentPlayer.Atk,-18}|");
             Console.WriteLine($"| Defense    : {_currentPlayer.Defense,-18}|");

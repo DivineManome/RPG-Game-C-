@@ -9,6 +9,7 @@ namespace Main
     public class Mountains : Game
     {
         private List<Enemy> _enemies;
+        private List<Item> _itemTypes;
         public Mountains(Player player) : base(player)
         {
             _enemies = new List<Enemy>
@@ -19,14 +20,25 @@ namespace Main
                 new Dragon("Dragon", 0,0,0,0),
                 new Giant("Giant", 0,0,0,0)
             };
+
+            _itemTypes = new List<Item>
+            {
+                new AtkPotion("Attack Potion", 1, 300),
+                new DefensePotion("Defense Potion", 1, 250),
+            };
         }
         public void EnterMountain()
         {
+            Console.Write("You enter the mountain and you encounter...");
+            Console.ReadKey();
+            Console.Clear();
             Random random = new Random();
             int reward = random.Next(2);
             if (reward == 0)
             {
-                Console.WriteLine("You found a reward.\n");
+                int randomReward = random.Next(2);
+                _currentPlayer.AddItem(_itemTypes[randomReward]);
+                Console.Write($"You found a {_itemTypes[randomReward].Name}!");
             }
             else
             {
@@ -36,11 +48,10 @@ namespace Main
                 encounteredEnemy.Atk = random.Next(20, 31);
                 encounteredEnemy.Defense = random.Next(7, 11);
                 encounteredEnemy.GoldDrop = random.Next(300, 351);
-                bool ifWin = EngageInBattle(encounteredEnemy);
-                if (ifWin)
-                {
-                    Console.WriteLine($"You are rewarded {encounteredEnemy.GoldDrop} gold for killing {encounteredEnemy.Name}!");
-                }
+                Console.Write($"A {encounteredEnemy.Name}! engaging in battle...");
+                Console.ReadKey();
+                Console.Clear();
+                EngageInBattle(encounteredEnemy, false);
             }
         }
     }

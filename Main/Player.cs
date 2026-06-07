@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,12 +20,7 @@ namespace Main
             _hairColour = hairColour;
             _age = age;
             _gold = gold;
-            _items = new List<Item>
-            {
-                new Weapon("Sword", 1),
-                new Consumable("Potion", 3),
-                new Armor("Armor", 2),
-            };
+            _items = new List<Item>();
         }
 
         public int Age { get { return _age; } set { _age = value; } }
@@ -34,7 +30,7 @@ namespace Main
 
         public void CheckInventory()
         {
-            if (_items.Count == 0) { Console.WriteLine("You do not have any items at this moment"); Console.ReadKey(); Console.Clear(); return; }
+            if (_items.Count == 0) { Console.Write("You do not have any items at this moment..."); Console.ReadKey(); Console.Clear(); return; }
             while (true)
             {
                 for (int i = 0; i < _items.Count; i++)
@@ -76,6 +72,43 @@ namespace Main
                 }
                 Console.Clear();
             }    
+        }
+        public void AddItem(Item item)
+        {
+            Item foundItem = _items.Find(c => c.Name == item.Name);
+
+            if (foundItem != null)
+            {
+                foundItem.Quantity += item.Quantity;
+            }
+            else
+            {
+                _items.Add(item);
+            }
+        }
+        public void ChangeCurrentEqippment()
+        {
+            List<int> numbers = new List<int>();
+            int count = 1;
+            for (int i = 0; i < _items.Count; i++)
+            {
+                if (_items[i] is Equippment eq)
+                {
+                    numbers.Add(i);
+                    Console.WriteLine($"{count}. {eq.Name}: {eq.Boost}");
+                    count++;
+                }
+            }
+            if (int.TryParse(Console.ReadLine(), out int option))
+            {
+                if (option > 0 && option <= numbers.Count)
+                {
+                    if (_items[option] is Armor armor)
+                    {
+                        _currentArmor = armor;
+                    }
+                }
+            }
         }
     }
 }
