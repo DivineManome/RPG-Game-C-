@@ -22,7 +22,7 @@ namespace Main
         {
             while (true)
             {
-                Console.Write("You have selected to go to the town. Where would you like to go?\n1. Inn (Restore HP to max)\n2. Item Shop (Buy Consumable Items)\n3. Weapon Shop\n4. Armor Shop\n5. Hospital (Review Character stats & apperances)\n6. Exit\n> ");
+                Console.Write("You have selected to go to the town. Where would you like to go?\n1. Inn (Restore HP to max)\n2. Item Shop (Buy Consumable Items)\n3. Weapon Shop\n4. Armor Shop\n5. Review Character stats & apperances\n6. Exit\n> ");
                 if (int.TryParse(Console.ReadLine(), out int option))
                 {
                     switch (option)
@@ -31,7 +31,7 @@ namespace Main
                         case 2: EnterItemShop(); break;
                         case 3: EnterWeaponShop(); break;
                         case 4: EnterArmorShop(); break;
-                        case 5: Hospital(); break;
+                        case 5: StatCheck(); break;
                         case 6: return;
                     }
                 }
@@ -53,16 +53,13 @@ namespace Main
         public void EnterItemShop()
         {
             Console.Clear();
-            Console.WriteLine("You have entered the item shop!");
-            _itemShop.DisplayShop();
-            Console.ReadKey();
+            _itemShop.DisplayShop(ref _currentPlayer);
             Console.Clear();
 
         }
         public void EnterArmorShop()
         {
             Console.Clear();
-            Console.WriteLine("You have entered the Armor shop!");
             _armorShop.DisplayShop(ref _currentPlayer);
             Console.Clear();
 
@@ -74,7 +71,7 @@ namespace Main
             Console.Clear();
             
         }
-        public void Hospital()
+        public void StatCheck()
         {
             Console.Clear();
             Console.WriteLine("+--------------------------------+");
@@ -89,7 +86,15 @@ namespace Main
             Console.WriteLine($"| Attack     : {_currentPlayer.Atk,-18}|");
             Console.WriteLine($"| Defense    : {_currentPlayer.Defense,-18}|");
             Console.WriteLine($"| HP         : {$"{_currentPlayer.CurrentHP}/{_currentPlayer.MaxHP}",-18}|");
-            Console.WriteLine("+--------------------------------+");
+            if (_currentPlayer.CurrentWeapon.Name != "")
+            {
+                Console.WriteLine($"| {_currentPlayer.CurrentWeapon.Name,-11}: {_currentPlayer.CurrentWeapon.Boost,-18}|");
+            }
+            if (_currentPlayer.CurrentArmor.Name != "")
+            {
+                Console.WriteLine($"| {_currentPlayer.CurrentArmor.Name,-11}: {_currentPlayer.CurrentArmor.Boost,-18}|");
+            }
+            Console.Write("+--------------------------------+");
             Console.ReadKey();
             Console.Clear();
         }   

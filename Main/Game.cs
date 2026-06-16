@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,11 +54,13 @@ namespace Main
                                 {
                                     Console.Clear();
                                     enemy.CurrentHP = _currentPlayer.Attacks(enemy);
+                                    enemy.TempDef = 0;
+                                    _currentPlayer.TempAtk = 0;
                                     Console.ReadKey();
                                     myTurn = false;
                                     break;
                                 }
-                            case 2: Console.WriteLine("You open the Item Menu!"); Console.ReadKey(); myTurn = false; break;
+                            case 2: Console.Clear(); _currentPlayer.UseItem(enemy); myTurn = false; break;
                             case 3:
                                 {
                                     if (bossBattle) { break; }
@@ -92,12 +95,16 @@ namespace Main
                     if (randomOption <= 6)
                     {
                         _currentPlayer.CurrentHP = enemy.Attacks(_currentPlayer);
+                        _currentPlayer.TempDef = 0;
+                        enemy.TempAtk = 0;
                         enemy.Superable = true;
                         Console.ReadKey();
                     }
                     else
                     {
                         enemy.DoSuperAttack(ref _currentPlayer);
+                        _currentPlayer.TempDef = 0;
+                        enemy.TempAtk = 0;
                         Console.ReadKey();
                     }
                     myTurn = true;
@@ -108,6 +115,7 @@ namespace Main
 
         public void StartGame()
         {
+            SaveSystem saveSystem = new SaveSystem();
             BossCastle bossCastle = new BossCastle(_currentPlayer);
             Forest forest = new Forest(_currentPlayer);
             Town town = new Town(_currentPlayer);
@@ -147,9 +155,21 @@ namespace Main
                                     }
                                 }
                             case 5: Console.Clear(); _currentPlayer.CheckInventory(); break;
-                            case 6: Console.Clear(); Console.Write("You are changing equippment..."); Console.ReadKey(); break;
-                            case 7: Console.Clear(); Console.Write("You are saving the game..."); Console.ReadKey(); break;
-                            case 8: Console.Clear(); Console.Write("You are loading the game..."); Console.ReadKey(); break;
+                            case 6: Console.Clear(); _currentPlayer.ChangeCurrentEqippment(); break;
+                            case 7: Console.Clear(); SaveSystem.Save(_currentPlayer); Console.ReadKey(); break;
+                            case 8:
+                                {
+                                    Console.Clear(); 
+                                    if (SaveSystem.Load(_currentPlayer) != _currentPlayer)
+                                    {
+                                        bossCastle._currentPlayer = SaveSystem.Load(_currentPlayer);
+                                        forest._currentPlayer = SaveSystem.Load(_currentPlayer);
+                                        town._currentPlayer = SaveSystem.Load(_currentPlayer);
+                                        Console.Write("Game Loaded!");
+                                    }
+                                    Console.ReadKey(); 
+                                    break;
+                                }
                             case 9: return;
                         }
                     }

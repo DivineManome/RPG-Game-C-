@@ -13,6 +13,11 @@ namespace Main
         }
         public override void DoSuperAttack(ref Player playerAttacking)
         {
+            int damage = 10;
+            if (playerAttacking.CurrentHP <= damage) { damage = (int)playerAttacking.CurrentHP; }
+            Console.WriteLine($"{_name} does {damage} to you and gets +5 defense for 1 turn");
+            _tempDef = 5;
+            playerAttacking.CurrentHP -= damage;
         }
     }
     public class Bandit : Enemy
@@ -22,6 +27,9 @@ namespace Main
         }
         public override void DoSuperAttack(ref Player playerAttacking)
         {
+            int goldCount = 50;
+            if (playerAttacking.Gold <= goldCount) { goldCount = playerAttacking.Gold; }
+            Console.WriteLine($"{_name} takes {goldCount} gold from you.");
         }
     }
     public class Goblin : Enemy
@@ -31,6 +39,8 @@ namespace Main
         }
         public override void DoSuperAttack(ref Player playerAttacking)
         {
+            Console.WriteLine($"{_name} gets +20 attack for 1 turn.");
+            _tempAtk = 20;
         }
     }
     public class Cobra : Enemy
@@ -40,6 +50,8 @@ namespace Main
         }
         public override void DoSuperAttack(ref Player playerAttacking)
         {
+            Console.WriteLine($"{_name} gets +10 defense for 1 turn.");
+            _tempDef = 20;
         }
     }
     public class Boar : Enemy
@@ -49,6 +61,10 @@ namespace Main
         }
         public override void DoSuperAttack(ref Player playerAttacking)
         {
+            int damage = 10;
+            if (playerAttacking.CurrentHP <= damage) { damage = (int)playerAttacking.CurrentHP; }
+            Console.WriteLine($"{_name} does {damage} to you.");
+            playerAttacking.CurrentHP -= damage;
         }
     }
 }

@@ -19,6 +19,8 @@ namespace Main
         protected float _defense;
         protected Weapon _currentWeapon;
         protected Armor _currentArmor;
+        protected float _tempAtk;
+        protected float _tempDef;
 
         public Character(string name, float maxHP, float atk, float defense)
         {
@@ -29,12 +31,16 @@ namespace Main
             _defense = defense;
             _currentArmor = new Armor("", 0, 0, 0);
             _currentWeapon = new Weapon("", 0, 0, 0);
+            _tempDef = 0;
+            _tempAtk = 0;
         }
         public string Name { get { return _name; } set { _name = value; } }
         public float MaxHP { get { return _maxHP; } set { _maxHP = value; } }
         public float CurrentHP { get { return _currentHP; } set { _currentHP = value; } }
         public float Atk { get { return _atk; } set { _atk = value; } }
+        public float TempAtk { get { return _tempAtk; } set { _tempAtk = value; } }
         public float Defense { get { return _defense; } set { _defense = value; } }
+        public float TempDef { get { return _tempDef; } set { _tempDef = value; } }
         public void Display()
         {
             int digitCurrentHP = (int)(_currentHP % 10); // 3
@@ -42,8 +48,8 @@ namespace Main
             int maxHPDisplay = 10 + Math.Abs(digitCurrentHP - digitMaxHP);
             Console.WriteLine("+----------------------+");
             Console.WriteLine($"| Name  : {_name,-13}|");
-            Console.WriteLine($"| Attack   : {_atk,-10}|");
-            Console.WriteLine($"| Defense : {_defense,-11}|");
+            Console.WriteLine($"| Attack   : {_atk + _tempAtk,-10}|");
+            Console.WriteLine($"| Defense : {_defense + _tempDef,-11}|");
             Console.WriteLine($"| HP      : {$"{_currentHP}/{_maxHP}",-11}|");
             if (_currentWeapon.Name != "")
             {
@@ -57,7 +63,7 @@ namespace Main
         }
         public float Attacks(Character enemyAttacked)
         {
-            float damage = (_atk + _currentWeapon.Boost) - (enemyAttacked.Defense + enemyAttacked._currentArmor.Boost);
+            float damage = (_atk + _currentWeapon.Boost + _tempAtk) - (enemyAttacked.Defense + enemyAttacked._currentArmor.Boost + enemyAttacked._tempDef);
             if (damage <= 0) { damage = 0; }
             float newHP = enemyAttacked.CurrentHP - damage;
             if (newHP <= 0) { Console.Write($"{_name} does {damage} damage to {enemyAttacked.Name}\n{enemyAttacked.Name} HP goes down to 0 HP..."); return 0; }

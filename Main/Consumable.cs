@@ -12,7 +12,7 @@ namespace Main
         {
         }
 
-        public virtual void Ability()
+        public virtual void Ability(Player player, Enemy enemy)
         {
 
         }
@@ -24,9 +24,9 @@ namespace Main
         {
         }
 
-        public override void Ability()
+        public override void Ability(Player player, Enemy enemy)
         {
-
+            player.CurrentHP += 50;
         }
     }
     public class AtkPotion : Consumable
@@ -35,9 +35,9 @@ namespace Main
         {
         }
 
-        public override void Ability()
+        public override void Ability(Player player, Enemy enemy)
         {
-
+            player.TempAtk += 30;
         }
     }
     public class DefensePotion : Consumable
@@ -46,9 +46,9 @@ namespace Main
         {
         }
 
-        public override void Ability()
+        public override void Ability(Player player, Enemy enemy)
         {
-
+            player.TempDef += 30;
         }
     }
     public class Gernade : Consumable
@@ -57,9 +57,10 @@ namespace Main
         {
         }
 
-        public override void Ability()
+        public override void Ability(Player player, Enemy enemy)
         {
-
+            if (enemy.CurrentHP <= 15) { enemy.CurrentHP = 0; return; }
+            enemy.CurrentHP -= 15;
         }
     }
 }
